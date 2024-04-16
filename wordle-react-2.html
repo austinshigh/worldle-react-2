@@ -84,17 +84,24 @@
 <body>
     <div id="app"></div>
     <script type = 'text/babel'>
-    function Letter(letter, key){
-        return <div className="key" id={letter} key={key} tabIndex={0}>{letter}</div>;
+    function Letter(props){
+        return <div className="key" id={props.children} key={props.key} tabIndex={0}>{props.children}</div>;
     }
 
-    function WideKey(id, innerText){
-        return <div className="wideKey" id={id}>{innerText}</div>
+    function WideKey(props){
+        return <div className="wideKey" id={props.id}>{props.children}</div>
     }
 
-    function Row(keyArray){
-        let arrayElements = keyArray.map((item, i) => <div key={i}>{item}</div>);
-        return <div className="row">{arrayElements}</div>
+    function Row(props){
+        return <div className="row">{props.children}</div>
+    }
+
+    function Container(props){
+        return <div className={props.className}>{props.children}</div>
+    }
+
+    function Square(props){
+        return <div key={`${props.row}${props.column}`} className={`square row${props.row} col${props.column}`}></div>
     }
 
     const NUM_SQUARES = 5;
@@ -104,40 +111,65 @@
     for (let i=0; i<NUM_ROWS; i++){
         for (let j=0; j<NUM_SQUARES; j++)
         {
-            grid.push(<div className={`square row${i} col${j}`} key={`${i}${j}`}/>)
+            grid.push(<Square row={i} column={j}/>);
         }
     }
-
-    let gridComponent = <div className="gridContainer"><div className="grid">{grid}</div></div>;
     
-    var buttonRow = Row([WideKey("newGame", "New Game"), WideKey("debugMode", "Debug")]);
-    var letRowOne = Row([Letter("Q"), Letter("W"),Letter("E"),Letter("R"),Letter("T"),Letter("Y"),Letter("U"),Letter("I"),Letter("O"),Letter("P")]);
-    var letRowTwo = Row([Letter("A"), Letter("S"),Letter("D"),Letter("F"),Letter("G"),Letter("H"),Letter("J"),Letter("K"),Letter("L")]);
-    var letRowThree = Row([WideKey("backspace", "Delete"),Letter("Z"), Letter("X"),Letter("C"),Letter("V"),Letter("B"),Letter("N"),Letter("M"),WideKey("enterKey", "Enter")]);
-    var header =<h1>Guess the word!</h1>;
-    var correctAnswer = <div id="correctAnswerContainer"></div>;
-
-    var winCaption = <div id="winCaption">Wins:</div>;
-    var wins = <div id="wins">0</div>;
-    var lossesCaption = <div id="lossCaption">Losses:</div>;
-    var losses = <div id="losses">0</div>;
-    var guessesCaption = <div id="guessesCaption">0</div>;
-    var guesses = <div id="guesses">0</div>;
-
-    var statContent = [winCaption, wins, lossesCaption, losses, guessesCaption, guesses].map((item, i) => <div key={i}>{item}</div>);
-    var stats = <div className="statContainer">{statContent}</div>;
-
-    var domContent = [header, correctAnswer, stats, buttonRow, gridComponent, letRowOne, letRowTwo, letRowThree].map((item, i) => <div key={i}>{item}</div>);
-    var backgroundContainer = <div className="backgroundContainer">
-        <div className="outerContainer">
-            <div className="innerContainer">{domContent}</div>
+    var reactDom = 
+    <div className="backgroundContainer">
+         <div className="outerContainer">
+            <div className="innerContainer">
+                <h1>Guess The Word</h1>
+                <Row>
+                    <WideKey id="newGame">{"New Game"}</WideKey>
+                    <WideKey id="debugMode">{"Debug"}</WideKey>
+                </Row>
+                <div className="gridContainer">
+                    <div className="grid">{grid}</div>
+                </div>
+                <Row>
+                    <Letter>Q</Letter>
+                    <Letter>W</Letter>
+                    <Letter>E</Letter>
+                    <Letter>R</Letter>
+                    <Letter>T</Letter>
+                    <Letter>Y</Letter>
+                    </Row>;
+                <Row>
+                    <Letter>A</Letter>
+                    <Letter>S</Letter>
+                    <Letter>D</Letter>
+                    <Letter>F</Letter>
+                    <Letter>G</Letter>
+                    <Letter>H</Letter>
+                    <Letter>J</Letter>
+                    <Letter>K</Letter>
+                    <Letter>L</Letter>
+                </Row>;
+                <Row>
+                    <WideKey id="backspace">{"Delete"}</WideKey>
+                    <Letter>Z</Letter>
+                    <Letter>X</Letter>
+                    <Letter>C</Letter>
+                    <Letter>V</Letter>
+                    <Letter>B</Letter>
+                    <Letter>N</Letter>
+                    <Letter>M</Letter>
+                    <WideKey id="enterKey">{"Enter"}</WideKey>
+                </Row>
+                <Container className="statContainer">
+                    <div id="winCaption">Wins:</div> 
+                    <div id="wins">0</div>
+                    <div id="lossCaption">Losses:</div>
+                    <div id="losses">0</div>
+                    <div id="guessesCaption">0</div>
+                    <div id="guesses">0</div>
+                </Container>;
+            </div>
         </div>
     </div>;
-
-    ReactDOM.render(backgroundContainer, app);
-
+    ReactDOM.render(reactDom, app);
     </script>
-
     <script>
 
     window.addEventListener('DOMContentLoaded', function() {
