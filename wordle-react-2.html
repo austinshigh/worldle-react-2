@@ -101,7 +101,7 @@
     }
 
     function Square(props){
-        return <div key={`${props.row}${props.column}`} className={`square row${props.row} col${props.column}`}></div>
+        return <div className={`square row${props.row} col${props.column}`}></div>
     }
 
     const NUM_SQUARES = 5;
@@ -111,7 +111,7 @@
     for (let i=0; i<NUM_ROWS; i++){
         for (let j=0; j<NUM_SQUARES; j++)
         {
-            grid.push(<Square row={i} column={j}/>);
+            grid.push(<Square key={`${i}${j}`} row={i} column={j}/>);
         }
     }
     
